@@ -1,0 +1,37 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body style="font-family:Arial, sans-serif">
+<h2>Merci pour votre commande, <span th:text="${customerName}">Client</span> !</h2>
+<p>Numéro de commande : <strong th:text="${orderNumber}">#000001</strong></p>
+<p>Date : <span th:text="${createdAt}">2025-11-26</span></p>
+
+<h3>Détails</h3>
+<table width="100%" cellpadding="6" cellspacing="0" border="1" style="border-collapse:collapse">
+    <thead>
+    <tr>
+        <th align="left">Produit</th>
+        <th align="right">PU</th>
+        <th align="right">Qté</th>
+        <th align="right">Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="it : ${items}">
+        <td th:text="${it.name}">Produit</td>
+        <td align="right" th:text="${it.unitPrice}">0.00</td>
+        <td align="right" th:text="${it.quantity}">1</td>
+        <td align="right" th:text="${it.lineTotal}">0.00</td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="3" align="right"><strong>Total</strong></td>
+        <td align="right" th:text="${total}">0.00</td>
+    </tr>
+    </tfoot>
+</table>
+
+<p style="margin-top:16px">Nous vous tiendrons informé(e) de l’expédition.</p>
+<p>- Firdawsitech</p>
+</body>
+</html>
