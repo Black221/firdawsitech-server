@@ -12,6 +12,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findByUuid(UUID uuid);
 
+    Optional<Product> findBySlug(String slug);
+
     boolean existsByUuid(UUID uuid);
 
     /** Liste triée récente (tous produits) */

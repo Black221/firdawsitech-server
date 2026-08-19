@@ -83,13 +83,16 @@ app:
     refresh-ttl-seconds: 2592000
 
   mail:
-    from: ${MAIL_FROM:"Boutique <no-reply@firdawsitech.com>"}
-    admin: ${MAIL_ADMIN:"admin@firdawsitech.com"}
+    from: ${MAIL_FROM:"Boutique <no-reply@firdawsitech.sn>"}
+    admin: ${MAIL_ADMIN:"admin@firdawsitech.sn"}
 
   files:
     # le dossier se trouve dans le home de l'utilisateur système
     upload-dir: /opt/firdawsitech/uploads/images
-    public-base-url: ${PUBLIC_FILES_URL:https://firdawsitech.com/api/v1/files/images}
+    public-base-url: ${PUBLIC_FILES_URL:https://firdawsitech.sn/api/v1/files/images}
+
+  bootstrap:
+    admin-password: ${APP_BOOTSTRAP_ADMIN_PASSWORD:}
 
 logging:
   level:

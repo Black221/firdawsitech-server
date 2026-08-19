@@ -9,6 +9,7 @@ import java.util.UUID;
  */
 public record ProductResponse(
         UUID uuid,
+        String slug,
         String name,
         BigDecimal price,
         String category,

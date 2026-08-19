@@ -144,9 +144,9 @@ public class BoutiqueController {
         ).body(created);
     }
 
-    @GetMapping("/{uuid}")
-    public ResponseEntity<ProductResponse> getByUuid(@PathVariable UUID uuid) {
-        return ResponseEntity.ok(products.getByUuid(uuid));
+    @GetMapping("/{slug}")
+    public ResponseEntity<ProductResponse> getBySlug(@PathVariable String slug) {
+        return ResponseEntity.ok(products.getBySlug(slug));
     }
 
 

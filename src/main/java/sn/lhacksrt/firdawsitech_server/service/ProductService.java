@@ -54,6 +54,14 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
+    public ProductResponse getBySlug(String slug) {
+        Product p = repo.findBySlug(slug)
+                .orElseThrow(() -> new EntityNotFoundException("Produit introuvable"));
+
+        return toResponse(p);
+    }
+
+    @Transactional(readOnly = true)
     public List<ProductResponse> listAll() {
         return repo.findAllByOrderByCreatedAtDesc()
                 .stream()
@@ -137,7 +145,7 @@ public class ProductService {
                 .toList();
 
         return new ProductResponse(
-                p.getUuid(), p.getName(), p.getPrice(), p.getCategory(),
+                p.getUuid(), p.getSlug(), p.getName(), p.getPrice(), p.getCategory(),
                 p.getPrimaryImageUrl(), // ou p.getImageUrl() si tu conserves le champ
                 p.getDescription(), p.getSpecs(), p.getInStock(), p.getRating(),
                 Boolean.TRUE.equals(p.getFeatured()), Boolean.TRUE.equals(p.getInCarousel()), p.getCarouselRank(),

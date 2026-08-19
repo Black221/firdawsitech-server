@@ -1,6 +1,7 @@
 package sn.lhacksrt.firdawsitech_server.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.*;
@@ -27,6 +28,9 @@ import java.util.stream.Collectors;
 public class SecurityConfig {
 
   private final JwtAuthFilter jwtFilter;
+
+  @Value("${app.cors.allowed-origins:https://firdawsitech.sn,https://www.firdawsitech.sn}")
+  private String allowedOrigins;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -62,7 +66,10 @@ public class SecurityConfig {
       final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
       final CorsConfiguration config = new CorsConfiguration();
       config.setAllowCredentials(true);
-      config.setAllowedOriginPatterns(Collections.singletonList("*"));
+      config.setAllowedOrigins(Arrays.stream(allowedOrigins.split(","))
+          .map(String::trim)
+          .filter(s -> !s.isEmpty())
+          .collect(Collectors.toList()));
       config.setAllowedHeaders(Collections.singletonList("*"));
       config.setAllowedMethods(Arrays.stream(HttpMethod.values()).map(HttpMethod::name).collect(Collectors.toList()));
       source.registerCorsConfiguration("/**", config);

@@ -6,10 +6,12 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.text.Normalizer;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -44,6 +46,10 @@ public class Product {
     @Size(max = 200)
     @Column(nullable = false, length = 200)
     private String name;
+
+    /** Slug SEO, généré automatiquement à partir du nom (stable après création). */
+    @Column(nullable = false, unique = true, updatable = false, length = 220)
+    private String slug;
 
     @NotNull
     @DecimalMin("0.00")
@@ -118,9 +124,24 @@ public class Product {
 
     /* --------------------- Hooks JPA --------------------- */
 
+    private static final Pattern NON_ALNUM = Pattern.compile("[^a-z0-9]+");
+
+    private static String slugify(String input) {
+        String normalized = Normalizer.normalize(input == null ? "" : input, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "");
+        String slug = NON_ALNUM.matcher(normalized.toLowerCase()).replaceAll("-");
+        slug = slug.replaceAll("^-+", "").replaceAll("-+$", "");
+        return slug;
+    }
+
     @PrePersist
     void prePersist() {
         if (uuid == null) uuid = UUID.randomUUID();
+        if (slug == null || slug.isBlank()) {
+            String base = slugify(name);
+            String suffix = uuid.toString().substring(0, 8);
+            slug = base.isBlank() ? suffix : base + "-" + suffix;
+        }
         if (rating == null) rating = BigDecimal.ZERO;
 
         if (featured == null) featured = Boolean.FALSE;
